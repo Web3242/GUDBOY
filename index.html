@@ -1,660 +1,148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Allin | Consciencia Frutal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-    <style>
-        /* CONFIGURACIÓN GLOBAL - BLOQUEADA */
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Playfair+Display:ital,wght@1,900&family=Plus+Jakarta+Sans:wght@200;400;600;700;800&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee Animation</title>
 
-        :root {
-            --bg: #fcfbf7; 
-            --accent: #3d5a35; 
-            --pitaya: #ff8fa3; 
-            --logo-morado: #c094c4; 
-            --nav-bg: #f7f2f8; 
-            --text: #0f110d;
-            --max-width: 1440px; 
-            --rappi-orange: #ff441f;
-        }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            cursor: crosshair;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-        .container-custom {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            width: 100%;
-            padding: 0 2rem;
-        }
+  /* Fondo marrón con ondas */
+  background: radial-gradient(circle at 30% 30%, #8b5a2b, #3e1f0f);
+  overflow: hidden;
+}
 
-        /* LOGO */
-        .font-logo {
-            font-family: "Times New Roman", Times, serif;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.12em; 
-            line-height: 1;
-            display: flex;
-            align-items: baseline;
-        }
-        .logo-a-inverted { display: inline-block; transform: rotate(180deg); margin-right: 0.12em; line-height: 0.7; }
-        .font-rappi { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 900; }
+/* ondas suaves */
+body::before {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: repeating-radial-gradient(
+    circle,
+    rgba(255,255,255,0.05) 0px,
+    rgba(255,255,255,0.05) 20px,
+    transparent 20px,
+    transparent 60px
+  );
+  animation: wave 12s linear infinite;
+}
 
-        /* ONDAS */
-        .wave-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .wave-svg { position: absolute; width: 250%; height: auto; fill: none; stroke-width: 1.5; animation: moveWave 25s linear infinite; }
-        .wave-top { top: -5%; stroke: var(--pitaya); opacity: 0.15; animation-duration: 35s; }
-        @keyframes moveWave { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes wave {
+  0% { transform: translate(-10%, -10%) rotate(0deg); }
+  100% { transform: translate(-10%, -10%) rotate(360deg); }
+}
 
-        .font-serif { font-family: 'Fraunces', serif; letter-spacing: -0.04em; }
+/* Card central */
+.card {
+  width: 300px;
+  height: 180px;
+  background: #5a2d0c;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
 
-        /* PANELES LATERALES */
-        .side-panel {
-            position: fixed; right: 0; top: 0; height: 100%; width: 100%; max-width: 450px;
-            background: white; z-index: 500; box-shadow: -20px 0 50px rgba(0,0,0,0.1);
-            padding: 2.2rem; display: flex; flex-direction: column;
-            transform: translateX(100%); 
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .side-panel.active { transform: translateX(0); }
+/* grano */
+.bean {
+  width: 40px;
+  height: 60px;
+  background: #3b1d0a;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
 
-        /* PRODUCT CARDS */
-        .product-card { background: #fff; border-radius: 2.5rem; transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 15px 40px rgba(0,0,0,0.02); cursor: pointer; overflow: hidden; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(0,0,0,0.06); }
+/* línea del grano */
+.bean::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 100%;
+  background: #1a0d05;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+}
 
-        .personalizar-overlay {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            background: rgba(255, 255, 255, 0.1); opacity: 0; transition: all 0.3s ease;
-        }
-        .product-card:hover .personalizar-overlay { opacity: 1; background: rgba(255, 255, 255, 0.2); }
-        .personalizar-tag { background: white; padding: 0.6rem 1.2rem; border-radius: 2rem; font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--accent); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+/* crema animada */
+.cream {
+  position: absolute;
+  width: 100%;
+  height: 0%;
+  background: #f5e6d3;
+  bottom: 0;
+  animation: fill 2s ease forwards;
+}
 
-        /* CLUB ALLIN */
-        .reward-track { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
-        .reward-line { position: absolute; top: 50%; left: 5%; width: 90%; height: 2px; background: #eee; z-index: 0; transform: translateY(-50%); }
-        .reward-seed { width: 34px; height: 34px; border-radius: 50%; background: white; border: 2px solid #eee; position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #ccc; }
-        .reward-seed.active { border-color: var(--accent); background: var(--accent); color: white; transform: scale(1.1); }
+@keyframes fill {
+  0% { height: 0%; }
+  50% { height: 120%; }
+  100% { height: 100%; }
+}
 
-        /* TAMAÑOS UI */
-        .size-option {
-            flex: 1; text-align: center; cursor: pointer; transition: all 0.3s ease;
-            padding: 1.2rem 0.5rem; border-radius: 1.2rem; border: 1.5px solid transparent;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
-        .size-option.selected { background: var(--nav-bg); border-color: var(--accent); }
-        .size-icon-container { display: flex; align-items: flex-end; justify-content: center; height: 45px; margin-bottom: 0.6rem; color: #ddd; }
-        .size-option.selected .size-icon-container { color: var(--accent); }
-        
-        .scale-s svg { width: 14px; height: 18px; }
-        .scale-m svg { width: 19px; height: 25px; }
-        .scale-l svg { width: 25px; height: 34px; }
-        .bowl-m svg { width: 28px; height: 18px; }
-        .bowl-l svg { width: 36px; height: 24px; }
+/* efecto de apertura */
+.split {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
 
-        .topping-item { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem; border-radius: 1.25rem; border: 1.5px solid rgba(0,0,0,0.05); background: white; transition: all 0.3s ease; cursor: pointer; margin-bottom: 0.6rem; }
-        .topping-item.selected { background-color: var(--accent); border-color: var(--accent); color: white; }
+.split div {
+  flex: 1;
+  background: transparent;
+  animation: open 2s ease forwards;
+}
 
-        .fruit-item { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; border: 1px solid #eee; border-radius: 1rem; cursor: pointer; transition: 0.2s; margin-bottom: 0.5rem; }
-        .fruit-item.selected { border-color: var(--pitaya); background: #fff5f6; }
-        .fruit-check { width: 18px; height: 18px; border: 2px solid #ddd; border-radius: 4px; position: relative; }
-        .fruit-item.selected .fruit-check { background: var(--pitaya); border-color: var(--pitaya); }
-        .fruit-item.selected .fruit-check::after { content: '✓'; color: white; font-size: 12px; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.split div:first-child {
+  border-right: 2px solid #1a0d05;
+}
 
-        .option-tile { flex: 1; padding: 1.1rem; border-radius: 1.25rem; border: 1px solid rgba(0,0,0,0.05); background: white; transition: all 0.3s ease; cursor: pointer; text-align: center; }
-        .option-tile.selected { background: var(--accent); border-color: var(--accent); color: white; }
+@keyframes open {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(var(--dir)); }
+}
 
-        /* CARRITO / CHECKOUT */
-        .cart-img-box { width: 85px; height: 85px; border-radius: 1.5rem; background: var(--nav-bg); flex-shrink: 0; border: 1px solid rgba(0,0,0,0.02); overflow: hidden; }
-        .cart-img-box img { width: 100%; height: 100%; object-fit: cover; }
+.left {
+  --dir: -10px;
+}
 
-        .checkout-input-v2 { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 12px 16px; font-size: 14px; transition: all 0.2s; color: black; background: white; }
-        .checkout-input-v2.error { border-color: #ff8fa3 !important; background: #fff8f9 !important; animation: shake 0.4s; }
+.right {
+  --dir: 10px;
+}
 
-        .category-row { position: relative; padding: 6rem 0; }
-        .row-glow { position: absolute; inset: 0; z-index: -1; opacity: 0.4; pointer-events: none; }
-        .glow-smoothies { background: linear-gradient(180deg, var(--bg) 0%, #f4f6f2 50%, var(--bg) 100%); }
-        .glow-refrescos { background: linear-gradient(180deg, var(--bg) 0%, #eef2ed 50%, var(--bg) 100%); }
-        .glow-helados { background: linear-gradient(180deg, var(--bg) 0%, #fdf5f6 50%, var(--bg) 100%); }
-        .glow-parfait { background: linear-gradient(180deg, var(--bg) 0%, #eef6f5 50%, var(--bg) 100%); }
-        .glow-postres { background: linear-gradient(180deg, var(--bg) 0%, #f7f2f8 50%, var(--bg) 100%); }
-        
-        #checkout-page, #success-modal { position: fixed; inset: 0; background: #fff; display: none; z-index: 1000; overflow-y: auto; }
-        #success-modal { z-index: 1100; flex-direction: column; align-items: center; justify-content: center; }
-
-        .payment-box { border-radius: 1rem; border: 1px solid #eee; overflow: hidden; margin-top: 1rem; }
-        .payment-row { padding: 1.25rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid #eee; cursor: pointer; }
-        .payment-radio { width: 18px; height: 18px; border: 2px solid #ddd; border-radius: 50%; position: relative; }
-        .payment-radio.active { border-color: var(--accent); }
-        .payment-radio.active::after { content: ''; position: absolute; inset: 3px; background: var(--accent); border-radius: 50%; }
-
-        /* MARQUESINA */
-        .marquee-container { background-color: var(--accent); margin: 2.5rem 0; padding: 1.8rem 0; overflow: hidden; display: flex; white-space: nowrap; }
-        .animate-marquee { display: flex; animation: marquee 25s linear infinite; min-width: 100%; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* CAMU CAMU PIC FIX */
-        .img-camu-camu { object-fit: cover; object-position: center 22%; transform: scale(1); transition: transform 0.7s ease; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
+</style>
 </head>
+
 <body>
 
-    <!-- NAVEGACIÓN -->
-    <nav class="fixed w-full z-40 px-6 md:px-12 py-6 md:py-8 bg-[var(--nav-bg)]/90 backdrop-blur-md border-b border-black/5 text-black">
-        <div class="container-custom flex justify-between items-center">
-            <div class="font-logo text-2xl md:text-3xl cursor-pointer" onclick="window.scrollTo(0,0)">
-                <span><span class="logo-a-inverted text-black">V</span>LL</span><span class="text-[var(--logo-morado)]">IN</span>
-            </div>
-            <div class="hidden md:flex space-x-12 text-[10px] uppercase font-bold tracking-[0.4em]">
-                <a href="#shop" class="hover:text-[var(--pitaya)] transition-colors text-black text-black">Menú</a>
-                <a href="#about-anchor" class="hover:text-[var(--pitaya)] transition-colors text-black text-black">NOSOTROS</a>
-                <a href="javascript:void(0)" onclick="openRewards()" class="hover:text-[var(--pitaya)] transition-colors text-black text-black">CLUB ALLIN</a>
-                <a href="javascript:void(0)" onclick="openLogin()" class="hover:text-[var(--pitaya)] transition-colors text-black text-black">Iniciar Sesión</a>
-            </div>
-            <div onclick="openCart()" class="text-[10px] font-bold uppercase tracking-widest border-b border-black/20 pb-1 cursor-pointer hover:text-[var(--pitaya)] transition-all">
-                Carrito (<span id="cart-count">0</span>)
-            </div>
-        </div>
-    </nav>
+<div class="card">
+  <div class="bean">
+    <div class="cream"></div>
 
-    <div id="overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[490] hidden" onclick="closeAllPanels()"></div>
-
-    <!-- PANEL CLUB ALLIN -->
-    <div id="rewards-panel" class="side-panel text-black">
-        <div class="flex justify-between items-start mb-8 text-black">
-            <div><span class="text-[10px] font-bold text-[var(--accent)] uppercase tracking-[0.3em] block mb-2">Comunidad</span><h2 class="font-serif text-3xl italic tracking-tighter leading-tight text-black text-black">Club Allin</h2></div>
-            <button onclick="closeAllPanels()" class="text-xl opacity-20 hover:opacity-100 text-black text-black">✕</button>
-        </div>
-        <div class="flex-grow overflow-y-auto no-scrollbar text-black text-black">
-            <div class="bg-gray-50 rounded-3xl p-6 mb-8 text-center shadow-sm text-black">
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] mb-4 opacity-40">Mis Points acumulados</p>
-                <div class="reward-track px-2">
-                    <div class="reward-line"></div>
-                    <div class="reward-seed active">1</div><div class="reward-seed active">2</div><div class="reward-seed active">3</div><div class="reward-seed">4</div><div class="reward-seed">5</div><div class="reward-gift">🎁</div>
-                </div>
-                <p class="text-[11px] mt-4 font-bold text-[var(--accent)] uppercase tracking-widest text-black">¡Solo 3 points más!</p>
-            </div>
-            <div class="space-y-4">
-                <div class="p-5 bg-white rounded-3xl border border-black/5 shadow-sm text-black">
-                    <h4 class="font-bold text-[11px] uppercase tracking-wider text-black">Beneficio 6 Points</h4>
-                    <p class="text-[10px] opacity-60 mt-2 leading-relaxed text-black">Obtén un 10% de descuento en cualquier producto al completar tu 6to punto.</p>
-                </div>
-                <div class="p-5 bg-[#fdf5f6] rounded-3xl border border-pink-100 shadow-sm text-black">
-                    <h4 class="font-bold text-[11px] uppercase tracking-wider text-[var(--pitaya)]">Regalo de Cumpleaños</h4>
-                    <p class="text-[10px] opacity-70 mt-2 leading-relaxed text-black">Si eres cliente frecuente, elige una galleta gratis o 2 toppings a elección.</p>
-                </div>
-            </div>
-        </div>
+    <div class="split">
+      <div class="left"></div>
+      <div class="right"></div>
     </div>
+  </div>
+</div>
 
-    <!-- PANEL INICIO SESIÓN -->
-    <div id="login-panel" class="side-panel text-black">
-        <div class="flex justify-between items-start mb-8 text-black">
-            <div><span class="text-[10px] font-bold text-[var(--accent)] uppercase tracking-[0.3em] block mb-2 text-[var(--accent)]">Bienvenido</span><h2 class="font-serif text-3xl italic tracking-tighter text-black">Mi Cuenta</h2></div>
-            <button onclick="closeAllPanels()" class="text-xl opacity-20 hover:opacity-100 text-black">✕</button>
-        </div>
-        <div class="space-y-6">
-            <input type="email" class="checkout-input-v2" placeholder="Correo Electrónico">
-            <button class="w-full bg-[var(--accent)] text-white py-5 rounded-3xl font-bold uppercase shadow-xl">Entrar</button>
-        </div>
-    </div>
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <div id="main-content">
-        <!-- Hero Section -->
-        <section class="min-h-[100vh] flex flex-col justify-center px-6 md:px-12 pt-32 pb-20 relative overflow-hidden text-black">
-            <div class="wave-background">
-                <svg class="wave-svg wave-top" viewBox="0 0 1440 320"><path d="M0,160C120,180,240,220,360,213.3C480,207,600,153,720,146.7C840,140,960,180,1080,193.3C1200,207,1320,193,1380,186.7L1440,180" stroke-linecap="round"></path></svg>
-            </div>
-            <div class="container-custom grid lg:grid-cols-2 gap-16 items-center relative z-10 text-black">
-                <div class="order-2 lg:order-1 flex flex-col items-start py-12 text-black">
-                    <div class="hero-accent-box flex items-center gap-4 mb-8 text-black">
-                        <div class="w-14 h-[2px] bg-[var(--accent)] text-black"></div>
-                        <span class="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--accent)]">Essential Nutrition</span>
-                    </div>
-                    <h1 class="font-serif text-[clamp(4.5rem,11vw,10.5rem)] font-black leading-[0.9] text-black">PURA <br> <span class="italic text-[var(--pitaya)]">FRUTA</span></h1>
-                    <div class="mt-16 flex items-center gap-12">
-                        <p class="text-base md:text-xl max-w-sm leading-relaxed opacity-60 font-medium italic text-black">Elevamos la fruta peruana a su máxima expresión estética. Nutrición sensorial profunda.</p>
-                        <a href="#shop" class="shrink-0 w-[140px] h-[140px] rounded-full border border-[var(--accent)] flex items-center justify-center text-[11px] font-black uppercase hover:bg-[var(--accent)] hover:text-white transition-all shadow-md group">Shop Now</a>
-                    </div>
-                </div>
-                <div class="relative order-1 lg:order-2 flex justify-center lg:justify-end">
-                    <div class="w-full max-w-md aspect-[4/5] bg-gray-100 rounded-[4rem] overflow-hidden shadow-2xl">
-                        <img src="BEBIDAS-PRESENTACION.png" alt="Presentación Allin" class="w-full h-full object-cover">
-                    </div>
-                    <div class="absolute -top-6 -right-6 w-28 h-28 md:w-36 md:h-36 bg-[var(--pitaya)] rounded-full flex items-center justify-center text-center p-4 border border-[var(--accent)] rotate-12 shadow-xl z-20">
-                        <span class="text-[var(--accent)] font-black text-[11px] md:text-xs uppercase leading-tight">Natural <br> Vibe</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Marquesina -->
-        <div class="marquee-container shadow-sm">
-            <div class="animate-marquee font-serif italic text-2xl md:text-4xl text-white items-center">
-                <span class="mx-16 uppercase font-sans font-bold tracking-widest text-white">Sabor de Origen</span> <span class="mx-16 opacity-30 text-white">✦</span>
-                <span class="mx-16 text-[var(--pitaya)]">Pure Peruvian Fruit</span> <span class="mx-16 opacity-30 text-white">✦</span>
-                <span class="mx-16 uppercase font-sans font-bold tracking-widest text-white">Sabor de Origen</span> <span class="mx-16 opacity-30 text-white">✦</span>
-                <span class="mx-16 text-[var(--pitaya)] text-white">Pure Peruvian Fruit</span> <span class="mx-16 opacity-30 text-white">✦</span>
-            </div>
-        </div>
-
-        <!-- MENU -->
-        <section id="shop" class="text-black">
-            <!-- Smoothies -->
-            <div class="category-row">
-                <div class="row-glow glow-smoothies"></div>
-                <div class="container-custom">
-                    <h2 class="font-serif text-5xl md:text-6xl font-black italic tracking-tighter mb-12 border-b border-black/5 pb-8 text-black text-black">Smoothies</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-black">
-                        <div class="product-card group" onclick="openCustomizer('Power Banana', 'smoothie', 25, 'SMOOTHIE-BANANA.png')">
-                            <div class="aspect-[3/4] relative"><img src="SMOOTHIE-BANANA.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 text-black"><span class="text-[9px] font-black uppercase text-[var(--accent)] block mb-1">RECUPERACIÓN MUSCULAR</span><h3 class="font-serif text-2xl text-black">Power Banana</h3><span class="font-bold italic text-lg text-black">S/ 25</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Aloha', 'smoothie', 25, 'SOMOOTHIE-FRESA.png')">
-                            <div class="aspect-[3/4] relative"><img src="SOMOOTHIE-FRESA.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 text-black"><span class="text-[9px] font-black uppercase text-[var(--accent)] block mb-1">SALUD DIGESTIVA</span><h3 class="font-serif text-2xl text-black">Aloha</h3><span class="font-bold italic text-lg text-black">S/ 25</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Solar Glow', 'smoothie', 25, 'SMOOTHIE-NARANJA.png')">
-                            <div class="aspect-[3/4] relative"><img src="SMOOTHIE-NARANJA.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 text-black"><span class="text-[9px] font-black uppercase text-[var(--accent)] block mb-1 text-black">HIDRATACIÓN</span><h3 class="font-serif text-2xl text-black">Solar Glow</h3><span class="font-bold italic text-lg text-black">S/ 25</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Zen Blue', 'smoothie', 25, 'SMOOTHIE-AZUL.png')">
-                            <div class="aspect-[3/4] relative"><img src="SMOOTHIE-AZUL.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 text-black"><span class="text-[9px] font-black uppercase text-[var(--accent)] block mb-1">DOPAMINA</span><h3 class="font-serif text-2xl text-black">Zen Blue</h3><span class="font-bold italic text-lg">S/ 25</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Refrescos -->
-            <div class="category-row text-black">
-                <div class="row-glow glow-refrescos"></div>
-                <div class="container-custom">
-                    <h2 class="font-serif text-5xl md:text-6xl font-black italic tracking-tighter mb-12 border-b border-black/5 pb-8 text-black text-black">Refrescos</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <div class="product-card group" onclick="openCustomizer('Bebida de Tumbo', 'refresco', 12, 'BEBIDA-TUMBO.png')">
-                            <div class="aspect-[3/4] relative text-black"><img src="BEBIDA-TUMBO.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 flex justify-between items-center text-black text-black"><h3 class="font-serif text-2xl text-black">Bebida de Tumbo</h3><span class="font-bold italic text-lg text-black">S/ 12</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Bebida de Aguaje', 'refresco', 12, 'BEBIDA-AGUAJE.png')">
-                            <div class="aspect-[3/4] relative"><img src="BEBIDA-AGUAJE.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 flex justify-between items-center text-black text-black"><h3 class="font-serif text-2xl text-black">Bebida de Aguaje</h3><span class="font-bold italic text-lg text-black">S/ 12</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Bebida de Maracuyá', 'refresco', 12, 'BEBIDA-MARACUYA.png')">
-                            <div class="aspect-[3/4] relative text-black"><img src="BEBIDA-MARACUYA.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 flex justify-between items-center text-black text-black"><h3 class="font-serif text-2xl text-black">Bebida de Maracuyá</h3><span class="font-bold italic text-lg text-black">S/ 12</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Bebida de Carambola', 'refresco', 12, 'BEBIDA-CARAMBOLA.png')">
-                            <div class="aspect-[3/4] relative text-black"><img src="BEBIDA-CARAMBOLA.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 flex justify-between items-center text-black text-black"><h3 class="font-serif text-2xl text-black">Bebida de Carambola</h3><span class="font-bold italic text-lg text-black">S/ 12</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Helados -->
-            <div class="category-row text-black">
-                <div class="row-glow glow-helados"></div>
-                <div class="container-custom">
-                    <h2 class="font-serif text-5xl md:text-6xl font-black italic tracking-tighter mb-12 border-b border-black/5 pb-8 text-black text-black text-black">Helados</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <div class="product-card group" onclick="openCustomizer('Helado de Tuna', 'helado', 15, 'HELADO-TUNA.png')">
-                            <div class="aspect-square relative text-black"><img src="HELADO-TUNA.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 flex justify-between items-center text-black"><h3 class="font-serif text-2xl text-black">Helado de Tuna</h3><span class="font-bold italic text-lg text-black">S/ 15</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Helado de Açaí', 'helado', 15, 'HELADO-DE-ACAI.png')">
-                            <div class="aspect-square relative text-black"><img src="HELADO-DE-ACAI.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 flex justify-between items-center text-black"><h3 class="font-serif text-2xl text-black">Helado de Açaí</h3><span class="font-bold italic text-lg text-black">S/ 15</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Helado de Camu Camu', 'helado', 15, 'HELADO-CAMU-CAMU.png')">
-                            <div class="aspect-square relative overflow-hidden text-black">
-                                <img src="HELADO-CAMU-CAMU.png" class="img-camu-camu">
-                                <div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div>
-                            </div>
-                            <div class="p-8 flex justify-between items-center text-black text-black text-black"><h3 class="font-serif text-2xl whitespace-nowrap text-black text-black">Helado de Camu Camu</h3><span class="font-bold italic text-lg text-black">S/ 15</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Parfait -->
-            <div class="category-row text-black">
-                <div class="row-glow glow-parfait text-black text-black"></div>
-                <div class="container-custom">
-                    <h2 class="font-serif text-5xl md:text-6xl font-black italic tracking-tighter mb-12 border-b border-black/5 pb-8 text-black text-black text-black">Parfait de Yogurt</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-black">
-                        <div class="product-card group" onclick="openCustomizer('Parfait de Frutas Personalizable', 'parfait', 18, 'PARFAIT-FRUTAS.png')">
-                            <div class="aspect-[3/4] relative text-black"><img src="PARFAIT-FRUTAS.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black">Parfait Frutas</h3><span class="font-bold italic text-lg text-black">S/ 18</span></div>
-                        </div>
-                        <div class="product-card group text-black" onclick="openCustomizer('Parfait de Arándano', 'parfait', 16, 'PARFAIT-ARANDANO.png')">
-                            <div class="aspect-[3/4] relative text-black"><img src="PARFAIT-ARANDANO.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black">Parfait Arándano</h3><span class="font-bold italic text-lg text-black">S/ 16</span></div>
-                        </div>
-                        <div class="product-card group text-black" onclick="openCustomizer('Parfait de Banana', 'parfait', 16, 'PARFAIT-BANANA.png')">
-                            <div class="aspect-[3/4] relative text-black text-black"><img src="PARFAIT-BANANA.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black">Parfait Banana</h3><span class="font-bold italic text-lg text-black">S/ 16</span></div>
-                        </div>
-                        <div class="product-card group text-black" onclick="openCustomizer('Parfait de Fresa', 'parfait', 16, 'PARFAIT-FRESA.png')">
-                            <div class="aspect-[3/4] relative text-black text-black text-black text-black"><img src="PARFAIT-FRESA.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black text-black">Parfait de Fresa</h3><span class="font-bold italic text-lg text-black">S/ 16</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Postres -->
-            <div class="category-row text-black text-black">
-                <div class="row-glow glow-postres"></div>
-                <div class="container-custom">
-                    <h2 class="font-serif text-5xl md:text-6xl font-black italic tracking-tighter mb-12 border-b border-black/5 pb-8 text-black text-black text-black text-black">Postres</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        <div class="product-card group" onclick="openCustomizer('Galleta Berry Cacao 70%', 'postres', 8, 'GALLETA-ARANDANOS-Y-CACAO.png')">
-                            <div class="aspect-square relative"><img src="GALLETA-ARANDANOS-Y-CACAO.png"><div class="personalizar-overlay"><span class="personalizar-tag">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black"><h3 class="font-serif text-2xl text-black text-black">Berry Cacao 70%</h3><span class="font-bold italic text-lg text-black">S/ 8</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Bombón Yogurt', 'postres', 6, 'BOMBOM-DE-CHOCOLATE.png')">
-                            <div class="aspect-square relative text-black"><img src="BOMBOM-DE-CHOCOLATE.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black">Bombón Yogurt</h3><span class="font-bold italic text-lg text-black">S/ 6</span></div>
-                        </div>
-                        <div class="product-card group" onclick="openCustomizer('Waffle Avena Orgánica', 'postres', 28, 'WAFFLE.png')">
-                            <div class="aspect-square relative text-black text-black text-black text-black text-black"><img src="WAFFLE.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black text-black text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black"><h3 class="font-serif text-2xl text-black text-black text-black">Waffle Orgánico</h3><span class="font-bold italic text-lg text-[var(--accent)]">S/ 28</span></div>
-                        </div>
-                        <div class="product-card group text-black" onclick="openCustomizer('Enrollado Pistacho', 'postres', 15, 'ENRROLADO-PISTACHO.png')">
-                            <div class="aspect-square relative text-black"><img src="ENRROLADO-PISTACHO.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black">Enrollado Pistacho</h3><span class="font-bold italic text-lg text-[var(--accent)] text-black">S/ 15</span></div>
-                        </div>
-                        <div class="product-card group text-black" onclick="openCustomizer('Enrollado Almendra', 'postres', 15, 'ENROLLADO-ALMENDRA.png')">
-                            <div class="aspect-square relative text-black"><img src="ENROLLADO-ALMENDRA.png"><div class="personalizar-overlay"><span class="personalizar-tag text-black text-black">Personalizar</span></div></div>
-                            <div class="p-8 text-black text-black text-black text-black text-black text-black text-black text-black text-black"><h3 class="font-serif text-2xl text-black">Enrollado Almendra</h3><span class="font-bold italic text-lg text-[var(--accent)] text-black">S/ 15</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOOTER -->
-        <footer id="about" class="py-16 bg-[var(--accent)] text-white relative text-white">
-            <div id="about-anchor" class="absolute -top-32 text-white"></div>
-            <div class="container-custom relative z-10 text-white">
-                <div class="grid lg:grid-cols-2 gap-12 items-start mb-16 text-white text-white">
-                    <h2 class="footer-habla text-[clamp(2.5rem,6vw,6.5rem)] font-black leading-[0.9] text-white uppercase text-white">LA <br> TIERRA <br> <span class="italic text-[var(--pitaya)]">HABLA</span></h2>
-                    <div class="space-y-6 text-white text-white text-white">
-                        <div><span class="text-[10px] font-bold uppercase text-[var(--pitaya)] block mb-3 opacity-95 tracking-[0.3em]">Acerca de nosotros</span><p class="text-sm md:text-base font-light leading-relaxed opacity-70 italic max-w-xl text-white">Somos el vínculo entre la tierra peruana y tu estilo de vida cotidiano. Nutrición sensorial profunda.</p></div>
-                        <div id="contact-block" class="grid grid-cols-2 gap-10 pt-6 border-t border-white/5 text-white text-white">
-                            <div><p class="text-[9px] font-bold uppercase text-[var(--pitaya)] mb-2 tracking-[0.2em]">Pidenos por</p><span class="font-rappi text-3xl md:text-5xl cursor-pointer hover:text-[var(--pitaya)] transition-colors text-white">Rappi</span></div>
-                            <div><p class="text-[9px] font-bold uppercase text-[var(--pitaya)] mb-2 tracking-[0.2em]">Contacto</p><a href="mailto:hola@allin.pe" class="font-serif text-xl md:text-2xl block hover:text-[var(--pitaya)] transition-colors text-white text-white">hola@allin.pe</a><p class="font-bold text-lg md:text-xl tracking-wider mt-1 text-white">+51 987723610</p></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="final-bar" class="pt-10 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center text-white text-white text-white">
-                    <div class="flex flex-col items-center md:items-start gap-5">
-                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--pitaya)] opacity-90 text-[var(--pitaya)]">REDES SOCIALES</p>
-                        <div class="flex gap-5 items-center text-white text-white">
-                            <a href="#" class="social-circle text-white text-white text-white text-white"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path></svg></a>
-                            <a href="#" class="social-circle text-white text-white text-white text-white"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-1.13-.31-2.34-.25-3.41.33-.71.38-1.25 1.03-1.51 1.8-.29.81-.28 1.72.02 2.52.43 1.17 1.39 2.13 2.58 2.52 1.08.38 2.29.31 3.32-.21.84-.43 1.53-1.14 1.9-1.98.24-.55.35-1.14.36-1.74-.01-4.43-.01-8.85-.01-13.27z"/></svg></a>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-center text-white text-white text-white text-white"><p class="text-[9px] uppercase text-white/50 tracking-[0.4em] italic leading-relaxed">© 2026 ALLIN Perú — Life Style orgánico</p></div>
-                    <div class="flex flex-col items-center md:items-end gap-1">
-                        <p class="text-[10px] font-bold uppercase text-[var(--pitaya)] opacity-80 tracking-[0.2em] text-[var(--pitaya)] text-[var(--pitaya)]">DIRECCIÓN</p>
-                        <p class="font-serif text-base md:text-lg italic text-white text-white">Av. La Encalada 1234, Surco</p>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <!-- PÁGINA DE CHECKOUT -->
-    <div id="checkout-page" class="bg-white text-black text-black">
-        <div class="checkout-header border-b py-6 bg-white sticky top-0 z-10 text-black">
-            <div class="container-custom flex justify-between items-center text-black text-black">
-                <div class="font-logo text-2xl text-black"><span><span class="logo-a-inverted text-black text-black text-black">V</span>LL</span><span class="text-[var(--logo-morado)] text-black text-black text-black">IN</span></div>
-                <button onclick="backFromCheckout()" class="text-[10px] font-bold uppercase tracking-widest opacity-40 hover:opacity-100 text-black text-black">Regresar</button>
-            </div>
-        </div>
-        <div class="container-custom py-16 text-black text-black">
-            <div class="grid lg:grid-cols-[1fr_400px] gap-16 items-start text-black">
-                <div class="space-y-12">
-                    <div>
-                        <div class="checkout-step-title text-[var(--accent)] font-bold mb-6 uppercase flex items-center gap-3 text-black"><span class="bg-[var(--accent)] text-white w-6 h-6 inline-flex items-center justify-center rounded-full text-xs">1</span> CONTACTO</div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-black text-black text-black text-black">
-                            <input type="text" id="chk-name" placeholder="Nombre" class="checkout-input-v2">
-                            <input type="text" id="chk-lastname" placeholder="Apellido" class="checkout-input-v2">
-                        </div>
-                        <input type="email" id="chk-email" placeholder="Correo" class="checkout-input-v2 mb-4 text-black text-black">
-                        <input type="tel" id="chk-phone" placeholder="Celular" class="checkout-input-v2 text-black text-black text-black">
-                    </div>
-                    <div><div class="checkout-step-title text-[var(--accent)] font-bold mb-6 uppercase flex items-center gap-3 text-black text-black text-black"><span class="bg-[var(--accent)] text-white w-6 h-6 inline-flex items-center justify-center rounded-full text-xs">2</span> ENVÍO</div><input type="text" id="chk-address" placeholder="Dirección completa" class="checkout-input-v2 text-black text-black text-black"></div>
-                    <div>
-                        <div class="checkout-step-title text-[var(--accent)] font-bold mb-6 uppercase flex items-center gap-3 text-black text-black text-black"><span class="bg-[var(--accent)] text-white w-6 h-6 inline-flex items-center justify-center rounded-full text-xs">3</span> PAGO</div>
-                        <div class="payment-box">
-                            <div class="payment-row" onclick="selectPayment('tarjeta')"><div id="radio-tarjeta" class="payment-radio active"></div><span class="font-bold text-xs uppercase">Tarjeta</span></div>
-                            <div id="card-details-panel" class="p-6 bg-gray-50 border-b text-black text-black text-black">
-                                <input type="text" id="card-num" placeholder="Número tarjeta" class="checkout-input-v2 mb-4 bg-white text-black" maxlength="19">
-                                <div class="grid grid-cols-2 gap-4 text-black text-black"><input type="text" id="card-exp" placeholder="MM/AA" class="checkout-input-v2 bg-white text-black text-black" maxlength="5"><input type="password" id="card-cvv" placeholder="CVV" class="checkout-input-v2 bg-white text-black text-black" maxlength="4"></div>
-                            </div>
-                            <div class="payment-row" onclick="selectPayment('yape')"><div id="radio-yape" class="payment-radio text-black text-black text-black"></div><span class="font-bold text-xs uppercase text-black text-black">Yape / Plin</span></div>
-                            <div id="qr-panel" class="p-8 bg-gray-50 border-b hidden text-center text-black text-black text-black text-black">
-                                <div class="w-32 h-32 bg-white mx-auto flex items-center justify-center border-2 border-black/5 rounded-xl shadow-sm text-black text-black"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01"></path></svg></div>
-                                <p class="text-[9px] mt-4 font-bold uppercase text-[var(--accent)] text-black text-black">Titular: Allin Perú</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-[#fcfbf7] p-8 rounded-3xl border border-black/5 shadow-sm sticky top-24 text-black text-black text-black text-black text-black">
-                    <h3 class="font-serif text-xl italic mb-8 border-b pb-4 text-black text-black text-black text-black">Resumen</h3>
-                    <div id="checkout-items-list" class="space-y-6 mb-8 text-black text-black text-black text-black text-black"></div>
-                    <div class="pt-8 border-t flex justify-between items-baseline text-black">
-                        <span class="font-bold text-[10px] uppercase tracking-widest text-black text-black text-black">Total a pagar</span>
-                        <span id="chk-total" class="font-serif text-3xl font-black italic text-black text-black text-black text-black">S/ 0.00</span>
-                    </div>
-                    <button onclick="finishOrder()" class="w-full bg-[var(--accent)] text-white py-5 rounded-xl font-bold uppercase mt-10 hover:opacity-95 shadow-xl transition-all text-black text-black text-black">FINALIZAR COMPRA →</button>
-                    <p id="validation-error" class="text-[9px] text-red-500 font-bold text-center mt-4 hidden uppercase tracking-widest text-black text-black text-black">Faltan campos obligatorios</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL ÉXITO -->
-    <div id="success-modal" class="flex-col items-center justify-center text-center p-10 text-black text-black text-black text-black">
-        <div class="w-24 h-24 bg-[var(--accent)] rounded-full flex items-center justify-center text-white mb-8 shadow-xl animate__animated animate__zoomIn text-black"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-        <h2 class="font-serif text-5xl italic mb-4 text-black text-black text-black text-black">¡Pedido Recibido!</h2>
-        <p class="text-base opacity-70 italic mb-10 max-w-sm mx-auto text-black text-black text-black">Gracias por comprar en Allin, nos comunicaremos contigo enseguida.</p>
-        <button onclick="resetApp()" class="text-[11px] font-bold uppercase border-b border-black/20 pb-1 hover:text-[var(--pitaya)] transition-all text-black text-black">Volver al inicio</button>
-    </div>
-
-    <!-- PERSONALIZACIÓN MODAL -->
-    <div id="custom-panel" class="side-panel text-black">
-        <div class="flex justify-between items-start mb-8 text-black text-black text-black text-black text-black">
-            <h2 id="custom-product-name" class="font-serif text-3xl italic tracking-tighter text-black">Producto</h2>
-            <button onclick="closeAllPanels()" class="text-xl opacity-20 hover:opacity-100 text-black">✕</button>
-        </div>
-        <div class="flex-grow overflow-y-auto no-scrollbar text-black text-black text-black text-black text-black">
-            <div id="base-ingredients-box" class="mb-8 p-4 bg-gray-50 rounded-2xl hidden text-black text-black text-black text-black"><p id="base-ingredients-text" class="text-[10px] leading-relaxed opacity-60 italic text-black text-black text-black text-black"></p></div>
-            <div id="dynamic-selectors" class="mb-10 text-black text-black"></div>
-            <div id="fruit-selector-container" class="mb-10 hidden text-black text-black">
-                <p class="text-[10px] font-bold uppercase opacity-40 mb-4 tracking-widest text-black">Selecciona tus frutas (3 incluidas, adicionales S/ 1.50 c/u)</p>
-                <div id="fruit-grid" class="space-y-2 text-black text-black text-black"></div>
-            </div>
-            <p id="extras-title" class="text-[10px] font-bold uppercase opacity-40 mb-6 tracking-widest text-black">Extras</p>
-            <div id="toppings-container" class="flex flex-col text-black text-black text-black text-black"></div>
-        </div>
-        <div class="pt-8 border-t border-black/5 text-black">
-            <div class="flex justify-between mb-4 px-1 text-black text-black text-black text-black text-black"><span class="text-[10px] font-bold uppercase opacity-30 tracking-widest text-black text-black text-black text-black">Subtotal</span><span id="custom-total-price" class="font-serif text-2xl font-black italic text-black text-black text-black text-black text-black">S/ 0.00</span></div>
-            <button onclick="confirmAddToCart()" class="w-full bg-[var(--accent)] text-white py-5 rounded-3xl font-bold uppercase shadow-xl tracking-widest text-black text-black text-black">Añadir al Carrito</button>
-        </div>
-    </div>
-
-    <!-- CARRITO SIDE PANEL -->
-    <div id="cart-panel" class="side-panel text-black text-black text-black text-black text-black text-black">
-        <div class="h-full flex flex-col text-black text-black">
-            <div class="flex justify-between items-start mb-8 text-black text-black text-black text-black text-black text-black text-black"><h2 class="font-serif text-3xl italic tracking-tighter text-black text-black text-black">Carrito</h2><button onclick="closeAllPanels()" class="text-xl opacity-20 hover:opacity-100 text-black">✕</button></div>
-            <div id="cart-items-list" class="flex-grow flex flex-col overflow-y-auto text-black text-black text-black text-black text-black text-black text-black"></div>
-            <div id="cart-footer" class="pt-8 border-t border-black/5 hidden text-black">
-                <div class="flex justify-between mb-6 px-1 font-bold uppercase text-xs tracking-widest text-black text-black text-black text-black text-black"><span>Total</span><span id="cart-grand-total">S/ 0.00</span></div>
-                <button onclick="goToCheckout()" class="w-full bg-[var(--accent)] text-white py-5 rounded-3xl font-bold uppercase tracking-widest shadow-xl text-black">Continuar</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const toppingOptions = {
-            smoothie: [{ name: 'Proteína Vegetal', price: 5 }, { name: 'Chía Orgánica', price: 2 }, { name: 'Chocolate 70%', price: 4 }, { name: 'Colágeno', price: 4 }, { name: 'Mix Frutos Rojos', price: 5 }],
-            refresco: [{ name: 'Chía Orgánica', price: 2 }, { name: 'Electrolitos', price: 3 }],
-            helado: [{ name: 'Pistacho Gourmet', price: 3 }, { name: 'Granola', price: 2 }, { name: 'Chocolate 70%', price: 4 }],
-            parfait: [{ name: 'Avena', price: 2 }, { name: 'Miel', price: 1.5 }, { name: 'Granola', price: 2 }, { name: 'Pistacho', price: 3 }, { name: 'Chía', price: 2 }],
-            postres: [{ name: 'Mantequilla Almendra', price: 3 }, { name: 'Sal de Maras', price: 1 }]
-        };
-
-        const parfaitFruits = ["Fresa", "Plátano", "Arándano", "Kiwi", "Pitahaya", "Mango", "Piña", "Papaya", "Mandarina", "Naranja", "Uva", "Granadilla", "Tuna"];
-
-        const smoothieBases = {
-            'Power Banana': 'Plátano orgánico, piña, café espresso orgánico, cacao orgánico, mantequilla de cacahuete orgánica, monohidrato de creatina, proteína vegetal orgánica, sal rosa del Himalaya, agua.',
-            'Aloha': 'Fresa, plátano orgánico, papaya, glutamina, yogur de coco, linaza molida orgánica, frambuesa liofilizada, proteína vegetal orgánica, agua.',
-            'Solar Glow': 'Limón orgánico, piña, mango, plátano orgánico, electrolitos, agua de coco orgánica, sal rosa del Himalaya, crema batida de coco casera orgánica.',
-            'Zen Blue': 'Plátano orgánico, piña, proteína vegetal de vainilla, melena de león orgánica, espirulina azul orgánica, crema batida de coco orgánica, agua filtrada.'
-        };
-
-        const cupSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2H7L8 22H16L17 2Z"/><path d="M7 6H17"/></svg>`;
-        const iceCreamSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7H3L5 21H19L21 7Z"/><path d="M3 11H21"/></svg>`;
-
-        let cart = []; let currentProductName = ''; let currentImg = ''; let basePrice = 0; let currentCategory = ''; let selectedToppings = new Set(); let selectedFruits = new Set(); let currentSizePrice = 0; let currentSizeName = ''; let currentTemp = 'Sin calentar';
-
-        function openOverlay() { document.getElementById('overlay').classList.remove('hidden'); setTimeout(() => document.getElementById('overlay').classList.add('opacity-100'), 10); }
-        function closeAllPanels() { document.querySelectorAll('.side-panel').forEach(p => p.classList.remove('active')); const overlay = document.getElementById('overlay'); overlay.classList.remove('opacity-100'); setTimeout(() => { overlay.classList.add('hidden'); }, 300); }
-        function openRewards() { openOverlay(); document.getElementById('rewards-panel').classList.add('active'); }
-        function openLogin() { openOverlay(); document.getElementById('login-panel').classList.add('active'); }
-        function openCart() { renderCart(); openOverlay(); document.getElementById('cart-panel').classList.add('active'); }
-
-        function openCustomizer(name, category, price, img) { 
-            currentProductName = name; currentImg = img; basePrice = price; currentCategory = category; selectedToppings.clear(); selectedFruits.clear();
-            const baseBox = document.getElementById('base-ingredients-box');
-            const baseText = document.getElementById('base-ingredients-text');
-            if(smoothieBases[name]) { baseBox.classList.remove('hidden'); baseText.innerText = smoothieBases[name]; } else { baseBox.classList.add('hidden'); }
-            renderDynamicSelectors(category); renderFruits(name, category); renderToppings(category); 
-            document.getElementById('custom-product-name').innerText = name; 
-            updatePriceDisplay(); openOverlay(); document.getElementById('custom-panel').classList.add('active'); 
-        }
-
-        function renderFruits(name, category) {
-            const container = document.getElementById('fruit-selector-container');
-            const grid = document.getElementById('fruit-grid');
-            if (category === 'parfait' && name === 'Parfait de Frutas Personalizable') {
-                container.classList.remove('hidden');
-                grid.innerHTML = parfaitFruits.map(fruit => `<div class="fruit-item text-black" onclick="toggleFruit('${fruit}', this)"><span class="text-xs font-bold text-black">${fruit}</span><div class="fruit-check"></div></div>`).join('');
-            } else { container.classList.add('hidden'); }
-        }
-
-        function toggleFruit(fruit, el) { if (selectedFruits.has(fruit)) { selectedFruits.delete(fruit); el.classList.remove('selected'); } else { selectedFruits.add(fruit); el.classList.add('selected'); } updatePriceDisplay(); }
-
-        function renderDynamicSelectors(category) {
-            const container = document.getElementById('dynamic-selectors');
-            if (category === 'smoothie' || category === 'refresco') {
-                container.innerHTML = `<p class="text-[10px] font-bold uppercase opacity-40 mb-6 tracking-widest text-black text-black">Tamaño</p>
-                <div class="flex gap-2">
-                    <div class="size-option selected text-black" onclick="selectSize('chico', 0, '300 ml', this)"><div class="size-icon-container scale-s text-black text-black">${cupSvg}</div><span class="size-name text-black">Chico</span><span class="size-price-tag text-black">S/ 0.00</span></div>
-                    <div class="size-option text-black" onclick="selectSize('mediano', 1.5, '400 ml', this)"><div class="size-icon-container scale-m text-black text-black">${cupSvg}</div><span class="size-name text-black text-black">Mediano</span><span class="size-price-tag text-black">+ S/ 1.50</span></div>
-                    <div class="size-option text-black" onclick="selectSize('alto', 2.5, '500 ml', this)"><div class="size-icon-container scale-l text-black text-black">${cupSvg}</div><span class="size-name text-black text-black">Alto</span><span class="size-price-tag text-black">+ S/ 2.50</span></div>
-                </div>`;
-                currentSizePrice = 0; currentSizeName = 'Chico (300ml)';
-            } else if (category === 'helado') {
-                container.innerHTML = `<p class="text-[10px] font-bold uppercase opacity-40 mb-6 tracking-widest text-black text-black">Recipiente</p>
-                <div class="flex gap-2">
-                    <div class="size-option selected text-black" onclick="selectSize('mediano', 0, '180 ml', this)"><div class="size-icon-container bowl-m text-black">${iceCreamSvg}</div><span class="size-name text-black text-black">Mediano</span><span class="size-price-tag text-black text-black">S/ 0.00</span></div>
-                    <div class="size-option text-black" onclick="selectSize('grande', 3, '300 ml', this)"><div class="size-icon-container bowl-l text-black">${iceCreamSvg}</div><span class="size-name text-black text-black">Grande</span><span class="size-price-tag text-black text-black">S/ 0.00</span></div>
-                </div>`;
-                currentSizePrice = 0; currentSizeName = 'Mediano (180ml)';
-            } else if (category === 'postres') {
-                container.innerHTML = `<p class="text-[10px] font-bold uppercase opacity-40 mb-6 text-black text-black text-black">Preferencia</p><div class="flex gap-4"><div class="option-tile selected text-black" onclick="selectTemp('Sin calentar', this)"><span>Sin calentar</span></div><div class="option-tile text-black" onclick="selectTemp('Caliente', this)"><span>Caliente</span></div></div>`;
-                currentSizePrice = 0; currentTemp = 'Sin calentar';
-            } else { container.innerHTML = ''; }
-        }
-
-        function selectSize(id, supplement, ml, el) { document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected')); el.classList.add('selected'); currentSizePrice = supplement; currentSizeName = id.charAt(0).toUpperCase() + id.slice(1) + ' (' + ml + ')'; updatePriceDisplay(); }
-        function selectTemp(temp, el) { document.querySelectorAll('.option-tile').forEach(opt => opt.classList.remove('selected')); el.classList.add('selected'); currentTemp = temp; }
-
-        function renderToppings(category) { 
-            const container = document.getElementById('toppings-container'); const title = document.getElementById('extras-title');
-            if(!container || !title) return; container.innerHTML = ''; 
-            if(!toppingOptions[category]) { title.style.display = 'none'; return; } title.style.display = 'block';
-            toppingOptions[category].forEach(top => { 
-                const div = document.createElement('div'); div.className = 'topping-item text-black'; 
-                div.onclick = () => { div.classList.toggle('selected'); if(selectedToppings.has(top.name)) selectedToppings.delete(top.name); else selectedToppings.add(top.name); updatePriceDisplay(); }; 
-                div.innerHTML = `<div><span class="font-bold text-[11px] uppercase">${top.name}</span></div><span class="font-bold text-[10px]">+ S/ ${top.price.toFixed(2)}</span>`; 
-                container.appendChild(div); 
-            }); 
-        }
-
-        function updatePriceDisplay() { 
-            let tTotal = 0; if(toppingOptions[currentCategory]) toppingOptions[currentCategory].forEach(t => { if(selectedToppings.has(t.name)) tTotal += t.price; });
-            let fruitExtra = (currentCategory === 'parfait' && currentProductName === 'Parfait de Frutas Personalizable' && selectedFruits.size > 3) ? (selectedFruits.size - 3) * 1.5 : 0;
-            const total = basePrice + currentSizePrice + tTotal + fruitExtra; 
-            document.getElementById('custom-total-price').innerText = `S/ ${total.toFixed(2)}`; 
-        }
-
-        function confirmAddToCart() { 
-            let tTotal = 0; if(toppingOptions[currentCategory]) toppingOptions[currentCategory].forEach(t => { if(selectedToppings.has(t.name)) tTotal += t.price; });
-            let fruitExtra = (currentCategory === 'parfait' && currentProductName === 'Parfait de Frutas Personalizable' && selectedFruits.size > 3) ? (selectedFruits.size - 3) * 1.5 : 0;
-            const finalPrice = basePrice + currentSizePrice + tTotal + fruitExtra;
-            let opt = (currentCategory === 'postres') ? currentTemp : currentSizeName;
-            if (currentCategory === 'parfait') { opt = (currentProductName === 'Parfait de Frutas Personalizable') ? (selectedFruits.size > 0 ? Array.from(selectedFruits).join(", ") : "Base yogurt") : "Clásico"; }
-            cart.push({ id: Date.now(), name: currentProductName, option: opt, price: finalPrice, img: currentImg }); 
-            document.getElementById('cart-count').innerText = cart.length; closeAllPanels(); 
-        }
-
-        function renderCart() { 
-            const list = document.getElementById('cart-items-list'); const totalEl = document.getElementById('cart-grand-total'); 
-            if (cart.length === 0) { list.innerHTML = `<p class="text-center py-10 opacity-30 italic text-black">Tu carrito está vacío.</p>`; document.getElementById('cart-footer').classList.add('hidden'); return; }
-            document.getElementById('cart-footer').classList.remove('hidden'); list.innerHTML = ''; let gTotal = 0;
-            cart.forEach(item => { 
-                gTotal += item.price; 
-                const div = document.createElement('div'); div.className = 'flex gap-4 py-4 border-b border-black/5 items-center text-black text-black'; 
-                const imgTag = item.img ? `<img src="${item.img}">` : `<div class="cart-img-placeholder text-black text-black text-black">ALLIN</div>`;
-                div.innerHTML = `<div class="cart-img-box text-black text-black">${imgTag}</div><div class="flex-grow text-black text-black text-black text-black"><h4 class="font-serif text-sm font-bold text-black">${item.name}</h4><span class="text-[9px] uppercase font-bold opacity-30 text-black text-black text-black text-black">${item.option}</span></div><div class="text-right text-black text-black text-black text-black text-black text-black"><span class="font-bold text-xs block text-black text-black">S/ ${item.price.toFixed(2)}</span><button onclick="removeItem(${item.id})" class="text-[8px] font-bold text-red-400 mt-2 uppercase text-black text-black">Quitar</button></div>`; 
-                list.appendChild(div); 
-            });
-            totalEl.innerText = `S/ ${gTotal.toFixed(2)}`;
-        }
-
-        function removeItem(id) { cart = cart.filter(i => i.id !== id); renderCart(); document.getElementById('cart-count').innerText = cart.length; }
-        function goToCheckout() { if(!cart.length) return; closeAllPanels(); document.getElementById('checkout-page').style.display = 'block'; renderCheckoutSummary(); selectPayment('tarjeta'); window.scrollTo(0,0); }
-        function backFromCheckout() { document.getElementById('checkout-page').style.display = 'none'; }
-        function selectPayment(method) { document.getElementById('radio-tarjeta')?.classList.toggle('active', method === 'tarjeta'); document.getElementById('radio-yape')?.classList.toggle('active', method === 'yape'); document.getElementById('card-details-panel').style.display = method === 'tarjeta' ? 'block' : 'none'; document.getElementById('qr-panel').style.display = method === 'yape' ? 'block' : 'none'; }
-        function renderCheckoutSummary() {
-            const list = document.getElementById('checkout-items-list'); const totalEl = document.getElementById('chk-total');
-            list.innerHTML = ''; let gTotal = 0;
-            cart.forEach(item => { gTotal += item.price; const imgTag = item.img ? `<img src="${item.img}">` : `<div class="cart-img-placeholder text-black">ALLIN</div>`;
-                div = document.createElement('div'); div.className = 'flex gap-4 items-center mb-6 text-black text-black text-black'; 
-                div.innerHTML = `<div class="cart-img-box text-black text-black text-black">${imgTag}</div><div class="flex-grow text-black text-black text-black text-black text-black"><h4 class="font-serif text-sm font-bold text-black">${item.name}</h4><p class="text-[9px] text-gray-400 mt-1 uppercase text-black text-black text-black">${item.option}</p><span class="font-bold text-xs text-black text-black text-black">S/ ${item.price.toFixed(2)}</span></div>`; 
-                list.appendChild(div); 
-            });
-            totalEl.innerText = `S/ ${gTotal.toFixed(2)}`;
-        }
-        function finishOrder() {
-            const fields = ['chk-email', 'chk-name', 'chk-lastname', 'chk-phone', 'chk-address']; let valid = true;
-            fields.forEach(id => { const el = document.getElementById(id); if (el && !el.value.trim()) { el.classList.add('error'); valid = false; } else if (el) { el.classList.remove('error'); } });
-            if (document.getElementById('radio-tarjeta').classList.contains('active')) { ['card-num', 'card-exp', 'card-cvv'].forEach(id => { const el = document.getElementById(id); if (el && !el.value.trim()) { el.classList.add('error'); valid = false; } else if (el) { el.classList.remove('error'); } }); }
-            if (!valid) { document.getElementById('validation-error').classList.remove('hidden'); return; }
-            document.getElementById('checkout-page').style.display = 'none'; document.getElementById('success-modal').style.display = 'flex';
-        }
-        function resetApp() { document.getElementById('success-modal').style.display = 'none'; cart = []; document.getElementById('cart-count').innerText = '0'; window.scrollTo({top:0, behavior:'smooth'}); }
-        window.addEventListener('load', () => setTimeout(() => document.getElementById('hero-img')?.classList.add('active'), 300));
-    </script>
 </body>
 </html>
