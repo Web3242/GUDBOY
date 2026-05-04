@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coffee Animation</title>
+<title>Coffee Animation Pro</title>
 
 <style>
 * {
@@ -15,16 +15,14 @@
 
 body {
   height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, #8b5a2b, #3e1f0f);
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* Fondo marrón con ondas */
-  background: radial-gradient(circle at 30% 30%, #8b5a2b, #3e1f0f);
-  overflow: hidden;
 }
 
-/* ondas suaves */
+/* FONDO ONDAS */
 body::before {
   content: "";
   position: absolute;
@@ -41,35 +39,25 @@ body::before {
 }
 
 @keyframes wave {
-  0% { transform: translate(-10%, -10%) rotate(0deg); }
-  100% { transform: translate(-10%, -10%) rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Card central */
-.card {
-  width: 300px;
-  height: 180px;
-  background: #5a2d0c;
-  border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+/* LOADING */
+.loader {
+  position: absolute;
+  z-index: 5;
 }
 
-/* grano */
 .bean {
-  width: 40px;
-  height: 60px;
+  width: 50px;
+  height: 70px;
   background: #3b1d0a;
   border-radius: 50%;
   position: relative;
   overflow: hidden;
 }
 
-/* línea del grano */
 .bean::before {
   content: "";
   position: absolute;
@@ -78,10 +66,8 @@ body::before {
   background: #1a0d05;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 50%;
 }
 
-/* crema animada */
 .cream {
   position: absolute;
   width: 100%;
@@ -92,40 +78,82 @@ body::before {
 }
 
 @keyframes fill {
-  0% { height: 0%; }
-  50% { height: 120%; }
+  0% { height: 0; }
   100% { height: 100%; }
 }
 
-/* efecto de apertura */
-.split {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+/* CONTENIDO PRINCIPAL */
+.main {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: 0.8s ease;
+  z-index: 2;
+}
+
+/* cuando aparece */
+.main.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* CAFÉS */
+.coffees {
   display: flex;
+  gap: 30px;
 }
 
-.split div {
-  flex: 1;
-  background: transparent;
-  animation: open 2s ease forwards;
+/* cada café */
+.coffee {
+  width: 80px;
+  height: 120px;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  transform: translateY(200px) scale(0.5);
+  opacity: 0;
+  animation: rise 0.8s ease forwards;
 }
 
-.split div:first-child {
-  border-right: 2px solid #1a0d05;
+.coffee:nth-child(1) { animation-delay: 0.2s; }
+.coffee:nth-child(2) { animation-delay: 0.4s; }
+.coffee:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes rise {
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
-@keyframes open {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(var(--dir)); }
+/* líquido café */
+.liquid {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 70%;
+  background: #6b3e1d;
+  border-radius: 0 0 10px 10px;
 }
 
-.left {
-  --dir: -10px;
+/* espuma */
+.foam {
+  position: absolute;
+  top: 20%;
+  width: 100%;
+  height: 20%;
+  background: #f5e6d3;
+  border-radius: 50%;
 }
 
-.right {
-  --dir: 10px;
+/* sombra */
+.shadow {
+  position: absolute;
+  bottom: -10px;
+  width: 100%;
+  height: 10px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 50%;
+  filter: blur(5px);
 }
 
 </style>
@@ -133,16 +161,44 @@ body::before {
 
 <body>
 
-<div class="card">
+<!-- LOADING -->
+<div class="loader" id="loader">
   <div class="bean">
     <div class="cream"></div>
-
-    <div class="split">
-      <div class="left"></div>
-      <div class="right"></div>
-    </div>
   </div>
 </div>
+
+<!-- CONTENIDO -->
+<div class="main" id="main">
+  <div class="coffees">
+
+    <div class="coffee">
+      <div class="foam"></div>
+      <div class="liquid"></div>
+      <div class="shadow"></div>
+    </div>
+
+    <div class="coffee">
+      <div class="foam"></div>
+      <div class="liquid"></div>
+      <div class="shadow"></div>
+    </div>
+
+    <div class="coffee">
+      <div class="foam"></div>
+      <div class="liquid"></div>
+      <div class="shadow"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+setTimeout(() => {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("main").classList.add("show");
+}, 2000);
+</script>
 
 </body>
 </html>
