@@ -29,19 +29,17 @@
         }
         h1, h2, h3, h4, .font-black {
             font-family: 'Bebas Neue', cursive;
-            letter-spacing: 0em; /* Espaciado natural por defecto */
+            letter-spacing: 0em; 
         }
         html {
             scroll-behavior: smooth;
         }
-        .map-container iframe {
-            filter: grayscale(100%) contrast(120%) brightness(90%);
-            transition: all 0.5s ease;
+        /* Textura de puntos estilo retro */
+        .bg-dots {
+            background-image: radial-gradient(#000 1.5px, transparent 0);
+            background-size: 15px 15px;
         }
-        .map-container:hover iframe {
-            filter: grayscale(0%) contrast(100%) brightness(100%);
-        }
-        /* Custom scrollbar para estilo americano */
+        /* Personalización de la barra de desplazamiento */
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -60,7 +58,7 @@
     <script type="text/babel">
         const { useState } = React;
 
-        // Iconos integrados como componentes SVG
+        // Componente de Iconos SVG
         const Icon = ({ name, size = 24, className = "" }) => {
             const icons = {
                 ShoppingBag: (
@@ -83,7 +81,6 @@
                         <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
                     </>
                 ),
-                Facebook: <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>,
                 MapPin: (
                     <>
                         <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
@@ -109,7 +106,14 @@
                 Flame: <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>,
                 Star: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>,
                 ChevronRight: <path d="m9 18 6-6-6-6"/>,
-                Navigation: <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+                Navigation: <polygon points="3 11 22 2 13 21 11 13 3 11"/>,
+                Truck: (
+                    <>
+                        <path d="M10 17h4M2 9h13v8H2zM15 9h5l2 2v6h-7z"/>
+                        <circle cx="7" cy="17" r="2"/>
+                        <circle cx="17" cy="17" r="2"/>
+                    </>
+                )
             };
 
             return (
@@ -142,10 +146,9 @@
                     { id: 3, name: 'JACK DANIELS', price: 22.00, desc: 'Cebolla caramelizada en reducción de Jack, tocino ahumado y doble queso.', note: '¡Dulce y salada!' },
                     { id: 4, name: 'LA GUD BOY', price: 25.00, desc: 'Triple smash, aros de cebolla, BBQ artesanal y el alma de Comas.', note: 'Solo para valientes' },
                 ],
-                PIQUEOS: [
-                    { id: 5, name: 'PAPAS REGULARES', price: 8.00, desc: 'Crocantes por fuera, suaves por dentro.' },
-                    { id: 6, name: 'ALITAS GUD', price: 22.00, desc: '6 piezas bañadas en salsa a elección (BBQ/Spicy).' },
-                    { id: 7, name: 'CHEDDAR FRIES', price: 15.00, desc: 'Bañadas en queso cheddar real y lluvia de tocino.' },
+                BEBIDAS: [
+                    { id: 5, name: 'CHICHA MORADA', price: 6.00, desc: 'Nuestra chicha artesanal de la casa, bien helada.' },
+                    { id: 6, name: 'BEBIDA DE MARACUYÁ', price: 6.00, desc: 'Refrescante maracuyá 100% natural.' },
                 ]
             };
 
@@ -165,39 +168,50 @@
             const removeItem = (id) => setCart(prev => prev.filter(i => i.id !== id));
             const cartTotal = cart.reduce((acc, curr) => acc + (curr.price * curr.qty), 0);
 
+            const handleConfirmOrder = () => {
+                if (cart.length === 0) return;
+                
+                const itemsText = cart.map(item => `*${item.qty}x* ${item.name} (S/ ${(item.price * item.qty).toFixed(2)})`).join('%0A');
+                const message = `Hola Gud Boy! 🍔 Quisiera realizar un pedido:%0A%0A${itemsText}%0A%0A*Total: S/ ${cartTotal.toFixed(2)}*%0A%0AGracias!`;
+                
+                // Redirección dinámica al WhatsApp con el mensaje predeterminado
+                const whatsappApiUrl = `https://api.whatsapp.com/send?phone=51936306561&text=${message}`;
+                window.open(whatsappApiUrl, '_blank');
+            };
+
             const googleMapsUrl = "https://www.google.com/maps/place/Gud+Boy+Burger/@-11.9370188,-77.0633622,17z/data=!3m1!4b1!4m6!3m5!1s0x9105d1cc14b159df:0x55972506c8193ae3!8m2!3d-11.9370241!4d-77.0607873!16s%2Fg%2F11lnp0w2qv?entry=ttu";
-            const embedMapsUrl = "https://maps.google.com/maps?q=-11.9370241,-77.0607873&hl=es&z=16&amp;output=embed";
+            const whatsappDirectLink = "https://api.whatsapp.com/message/PVIE3CAZH7ORH1?autoload=1&app_absent=0&utm_source=ig";
 
             return (
                 <div className="min-h-screen selection:bg-red-600 selection:text-white pb-20">
                     
-                    {/* NAVEGACIÓN */}
+                    {/* BARRA DE NAVEGACIÓN - Tamaño de fuentes aumentado para 'La Carta' y 'Visítanos' */}
                     <nav className="sticky top-0 w-full z-50 bg-[#1A1A1A] text-white py-4 px-6 md:px-12 flex justify-between items-center border-b-4 border-black">
                         <div className="flex items-center space-x-4">
                             <img 
-                                src="Sin título.jpg" 
+                                src="Sin título.png" 
                                 alt="Logo Gud Boy" 
                                 className="w-12 h-12 rounded-full border-2 border-[#CE2029] object-cover"
                             />
-                            <div className="font-black text-3xl tracking-normal uppercase leading-none italic">
+                            <div className="font-black text-3xl tracking-normal uppercase leading-none italic text-white">
                                 GUD BOY<span className="text-[#CE2029]">.</span>
                             </div>
                         </div>
-                        <div className="flex items-center space-x-6 md:space-x-12 uppercase font-black text-[10px] tracking-[0.2em]">
-                            <a href="#carta" className="hidden md:block hover:text-[#CE2029]">La Carta</a>
-                            <a href="#visitanos" className="hidden md:block hover:text-[#CE2029]">Visítanos</a>
-                            <button onClick={() => setIsCartOpen(true)} className="bg-[#CE2029] px-4 py-2 flex items-center space-x-2 rounded-sm transform -rotate-1 hover:rotate-0 transition-transform text-white">
+                        <div className="flex items-center space-x-6 md:space-x-12 uppercase font-black text-sm tracking-[0.2em]">
+                            <a href="#carta" className="hover:text-[#CE2029] transition-colors">La Carta</a>
+                            <a href="#visitanos" className="hover:text-[#CE2029] transition-colors">Visítanos</a>
+                            <button onClick={() => setIsCartOpen(true)} className="bg-[#CE2029] px-4 py-2 flex items-center space-x-2 rounded-sm transform -rotate-1 hover:rotate-0 transition-transform text-white text-center">
                                 <Icon name="ShoppingBag" size={18} />
-                                <span className="text-sm tracking-tighter font-black">S/ {cartTotal.toFixed(2)}</span>
+                                <span className="text-sm tracking-tighter font-black ml-1">S/ {cartTotal.toFixed(2)}</span>
                             </button>
                         </div>
                     </nav>
 
-                    {/* HERO */}
+                    {/* SECCIÓN HERO */}
                     <section className="max-w-7xl mx-auto px-4 pt-12 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div className="relative space-y-8 order-2 lg:order-1">
-                            <div className="absolute -top-12 -left-4 md:-left-12 w-24 h-24 md:w-32 md:h-32 bg-yellow-400 rounded-full border-4 border-black flex items-center justify-center text-center p-2 transform -rotate-12 z-20 shadow-xl">
-                                <span className="font-handwriting text-black text-sm md:text-lg leading-tight">¡Desde <br/> Comas! 🇵🇪</span>
+                            <div className="absolute -top-12 left-6 md:left-2 w-24 h-24 md:w-32 md:h-32 bg-yellow-400 rounded-full border-4 border-black flex items-center justify-center text-center p-2 transform -rotate-12 z-20 shadow-xl">
+                                <span className="font-handwriting text-black text-sm md:text-lg leading-tight tracking-normal">¡Desde <br/> Comas! 🇵🇪</span>
                             </div>
 
                             <h1 className="text-7xl md:text-[10rem] font-black uppercase italic leading-[0.85] tracking-normal text-black">
@@ -205,11 +219,11 @@
                             </h1>
                             
                             <div className="max-w-md">
-                                <p className="text-lg md:text-xl font-bold uppercase leading-tight">
+                                <p className="text-lg md:text-xl font-bold uppercase leading-tight tracking-normal">
                                     Carne de verdad, pan artesanal y ese toque rebelde que solo encuentras en el Retablo. No somos fast food, somos comida real.
                                 </p>
-                                <div className="mt-8 flex space-x-4">
-                                    <a href="#carta" className="bg-black text-white px-10 py-5 font-black text-xl uppercase italic transform hover:scale-105 transition-all shadow-[6px_6px_0_#CE2029]">
+                                <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                                    <a href="#carta" className="bg-black text-white px-10 py-5 font-black text-xl uppercase italic transform hover:scale-105 transition-all shadow-[6px_6px_0_#CE2029] text-center text-white">
                                         VER LA CARTA
                                     </a>
                                 </div>
@@ -225,13 +239,13 @@
                                         className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    <div className="absolute bottom-6 left-6 text-white">
+                                    <div className="absolute bottom-6 left-6 text-white text-white">
                                         <span className="bg-[#CE2029] px-2 py-1 font-black text-xs uppercase mb-2 block w-fit italic">Receta Original</span>
                                         <h2 className="text-4xl font-black uppercase italic tracking-normal text-white">Whopper Smash</h2>
                                     </div>
                                 </div>
                                 <div className="absolute -bottom-6 -right-6 md:-right-12 bg-white border-4 border-black p-4 transform rotate-6 max-w-[200px] shadow-xl">
-                                    <p className="font-handwriting text-black text-lg leading-none">"El pan brioche es otro nivel..."</p>
+                                    <p className="font-handwriting text-black text-lg leading-none tracking-normal text-black">"El pan brioche es otro nivel..."</p>
                                     <div className="flex text-yellow-500 mt-2">
                                         {[1,2,3,4,5].map(i => <Icon key={i} name="Star" size={14} className="text-yellow-500 fill-current" />)}
                                     </div>
@@ -240,14 +254,14 @@
                         </div>
                     </section>
 
-                    {/* CARTA - Se cambió tracking-tighter por tracking-normal en los títulos */}
+                    {/* SECCIÓN DE LA CARTA - Cambio de Piqueos a Bebidas */}
                     <section id="carta" className="max-w-7xl mx-auto px-4 pt-32 pb-20">
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 text-black">
                             <div>
-                                <h2 className="text-6xl md:text-8xl font-black uppercase italic leading-none tracking-normal">
+                                <h2 className="text-6xl md:text-8xl font-black uppercase italic leading-none tracking-normal text-black">
                                     NUESTRA <span className="text-[#CE2029]">SELECCIÓN</span>
                                 </h2>
-                                <p className="font-handwriting text-2xl text-gray-600 mt-2">Pide una y entenderás el hype.</p>
+                                <p className="font-handwriting text-2xl text-gray-600 mt-2 tracking-normal text-black">Pide una y entenderás el hype.</p>
                             </div>
                             <div className="flex bg-black p-1 rounded-sm">
                                 {Object.keys(menuItems).map(cat => (
@@ -270,20 +284,20 @@
                                     onClick={() => addToCart(item)}
                                 >
                                     {item.note && (
-                                        <div className="absolute top-4 right-4 bg-yellow-400 border-2 border-black px-2 py-1 text-[10px] font-black uppercase transform rotate-2">
+                                        <div className="absolute top-4 right-4 bg-yellow-400 border-2 border-black px-2 py-1 text-[10px] font-black uppercase transform rotate-2 text-black">
                                             {item.note}
                                         </div>
                                     )}
-                                    <div className="flex justify-between items-start mb-4">
+                                    <div className="flex justify-between items-start mb-4 text-black">
                                         <h3 className="text-4xl font-black uppercase italic tracking-normal leading-none group-hover:text-white">
                                             {item.name}
                                         </h3>
                                         <span className="text-3xl font-black italic group-hover:text-white">S/ {item.price.toFixed(2)}</span>
                                     </div>
-                                    <p className="font-bold text-sm uppercase opacity-60 group-hover:opacity-100 group-hover:text-white max-w-xs mb-8">
+                                    <p className="font-bold text-sm uppercase opacity-60 group-hover:opacity-100 group-hover:text-white max-w-xs mb-8 text-black tracking-normal">
                                         {item.desc}
                                     </p>
-                                    <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest group-hover:text-white border-t-2 border-black group-hover:border-white pt-4">
+                                    <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest group-hover:text-white border-t-2 border-black group-hover:border-white pt-4 text-black">
                                         <span>Añadir al pedido</span>
                                         <Icon name="ChevronRight" size={14} />
                                     </div>
@@ -292,15 +306,16 @@
                         </div>
                     </section>
 
-                    {/* UBICACIÓN - Se cambió tracking-tighter por tracking-normal */}
+                    {/* SECCIÓN DE UBICACIÓN Y COBERTURA INTEGRADA */}
                     <section id="visitanos" className="max-w-7xl mx-auto px-4 py-20">
                         <div className="bg-[#1A1A1A] text-white grid grid-cols-1 md:grid-cols-2 border-8 border-black overflow-hidden relative">
-                            <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #fff 2px, transparent 2px)', backgroundSize: '15px 15px' }}></div>
+                            <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none bg-dots"></div>
                             
-                            <div className="p-12 space-y-8 flex flex-col justify-center">
-                                <h3 className="text-6xl font-black uppercase italic tracking-normal leading-none">
+                            <div className="p-12 space-y-8 flex flex-col justify-center relative z-10">
+                                <h3 className="text-6xl font-black uppercase italic tracking-normal leading-none text-white">
                                     ENCUÉNTRANOS<br/><span className="text-[#CE2029]">EN EL BARRIO</span>
                                 </h3>
+                                
                                 <div className="space-y-6">
                                     <div className="flex items-start space-x-4">
                                         <Icon name="MapPin" size={32} className="text-[#CE2029] shrink-0" />
@@ -309,85 +324,99 @@
                                             <p className="font-bold opacity-60 uppercase text-xs tracking-widest">El Retablo, Comas - Lima</p>
                                         </div>
                                     </div>
+                                    
                                     <div className="flex items-start space-x-4">
                                         <Icon name="Navigation" size={32} className="text-[#CE2029] shrink-0" />
                                         <div>
-                                            <p className="font-black text-xl uppercase italic text-white tracking-normal">Horarios</p>
-                                            <p className="font-bold opacity-60 uppercase text-xs tracking-widest">Martes a Domingo de 4PM a 11:30PM</p>
+                                            <p className="font-black text-xl uppercase italic text-white tracking-normal leading-none">Horarios</p>
+                                            <p className="font-bold opacity-60 uppercase text-xs tracking-widest text-white/80">Martes a Domingo de 6:30 PM a 11:00 PM</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-start space-x-4 border-t border-white/10 pt-4">
+                                        <Icon name="Truck" size={32} className="text-[#CE2029] shrink-0" />
+                                        <div>
+                                            <p className="font-black text-xl uppercase italic text-white tracking-normal leading-none">COBERTURA DE ENVÍO</p>
+                                            <p className="font-bold opacity-60 uppercase text-xs tracking-widest text-white/80">COMAS • LOS OLIVOS • CARABAYLLO</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex space-x-4 pt-4">
-                                    <a 
-                                        href="https://www.instagram.com/gudboyburger/" 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="bg-white text-black p-4 rounded-full hover:bg-[#CE2029] hover:text-white transition-all shadow-[4px_4px_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 active:shadow-none"
-                                    >
-                                        <Icon name="Instagram" />
-                                    </a>
-                                    <a href="#" className="bg-white text-black p-4 rounded-full hover:bg-[#CE2029] hover:text-white transition-all shadow-[4px_4px_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 active:shadow-none">
-                                        <Icon name="Facebook" />
-                                    </a>
+
+                                <div className="flex flex-col space-y-6 pt-4">
+                                    <div className="flex items-center space-x-4">
+                                        <a 
+                                            href="https://www.instagram.com/gudboyburger/" 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="bg-white text-black p-4 rounded-full hover:bg-[#CE2029] hover:text-white transition-all shadow-[4px_4px_0_rgba(0,0,0,1)] hover:translate-x-1 hover:translate-y-1 active:shadow-none"
+                                        >
+                                            <Icon name="Instagram" />
+                                        </a>
+                                        
+                                        <a 
+                                            href={whatsappDirectLink} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="text-white font-black uppercase text-sm tracking-[0.1em] hover:text-[#CE2029] transition-all underline underline-offset-4"
+                                        >
+                                            pide tu delivery dando click aquí
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div className="bg-gray-100 min-h-[400px] relative border-l-8 border-black overflow-hidden flex flex-col map-container text-black">
-                                <div className="flex-1 w-full h-full min-h-[300px]">
-                                    <iframe 
-                                        src={embedMapsUrl}
-                                        width="100%" 
-                                        height="100%" 
-                                        style={{ border: 0 }} 
-                                        allowFullScreen="" 
-                                        loading="lazy" 
-                                    ></iframe>
-                                </div>
-                                
-                                <div className="bg-[#F5E6CA] text-black p-6 border-t-8 border-black text-center">
-                                    <h4 className="text-2xl font-black uppercase italic mb-2 tracking-normal leading-none">¿Cómo llegar?</h4>
-                                    <p className="font-bold uppercase text-[10px] tracking-[0.2em] mb-4 opacity-70 italic">Presiona para abrir la ruta en tu celular</p>
-                                    <a 
-                                        href={googleMapsUrl}
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="inline-block bg-black text-white px-8 py-3 font-black uppercase italic text-sm hover:bg-[#CE2029] transition-colors shadow-[6px_6px_0_#CE2029] hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
-                                    >
-                                        ABRIR EN MAPS
-                                    </a>
+                            <div className="bg-[#CE2029] min-h-[400px] relative border-l-8 border-black flex flex-col items-center justify-center p-12 text-center overflow-hidden">
+                                <div className="absolute inset-0 opacity-20 pointer-events-none bg-dots"></div>
+                                <div className="relative z-10 space-y-6">
+                                    <div className="bg-white border-4 border-black p-6 transform -rotate-2 shadow-[8px_8px_0_#1A1A1A]">
+                                        <h4 className="text-black text-5xl font-black uppercase italic tracking-normal leading-none text-black">ENTRA ACÁ PARA <br/> VER LA UBI</h4>
+                                    </div>
+                                    <p className="text-white font-black uppercase text-sm tracking-widest bg-black px-4 py-1 inline-block">MIRA EL MAPA EXACTO EN TU CELULAR</p>
+                                    <div className="pt-4">
+                                        <a 
+                                            href={googleMapsUrl}
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="inline-block bg-white text-black px-12 py-5 font-black uppercase italic text-2xl hover:scale-110 transition-transform shadow-[10px_10px_0_#1A1A1A] border-4 border-black text-black"
+                                        >
+                                            ABRIR EN MAPS
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    {/* CARRITO */}
+                    {/* PANEL DEL CARRITO - Mensaje de confirmación dinámico */}
                     {isCartOpen && (
                         <div className="fixed inset-0 z-[100] flex justify-end">
                             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsCartOpen(false)}></div>
                             <div className="relative w-full max-w-lg bg-white h-full flex flex-col border-l-8 border-black">
                                 <div className="p-8 border-b-8 border-black bg-black text-white flex justify-between items-center">
-                                    <h2 className="text-4xl font-black italic uppercase tracking-normal">TU CUENTA<span className="text-[#CE2029]">.</span></h2>
-                                    <button onClick={() => setIsCartOpen(false)} className="hover:rotate-90 transition-transform"><Icon name="X" size={32} /></button>
+                                    <h2 className="text-4xl font-black italic uppercase tracking-normal text-white text-white">TU CUENTA<span className="text-[#CE2029]">.</span></h2>
+                                    <button onClick={() => setIsCartOpen(false)} className="hover:rotate-90 transition-transform text-white">
+                                        <Icon name="X" size={32} />
+                                    </button>
                                 </div>
                                 
                                 <div className="flex-1 overflow-y-auto p-8 space-y-6 text-black" style={{ backgroundImage: 'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px)', backgroundSize: '100% 2rem' }}>
                                     {cart.length === 0 ? (
                                         <div className="h-full flex flex-col items-center justify-center opacity-20">
-                                            <span className="text-8xl mb-4">🍟</span>
-                                            <p className="text-2xl font-black uppercase italic tracking-widest">Sin nada por ahora...</p>
+                                            <span className="text-8xl mb-4 text-black font-black italic">🍟</span>
+                                            <p className="text-2xl font-black uppercase italic tracking-widest text-black">Sin nada por ahora...</p>
                                         </div>
                                     ) : (
                                         cart.map(item => (
-                                            <div key={item.id} className="flex justify-between items-center border-b-2 border-dashed border-black pb-4">
+                                            <div key={item.id} className="flex justify-between items-center border-b-2 border-dashed border-black pb-4 text-black">
                                                 <div className="flex-1 pr-4">
-                                                    <h4 className="text-xl font-black uppercase italic tracking-normal leading-none">{item.name}</h4>
-                                                    <p className="font-bold text-[10px] uppercase opacity-50 mt-1">Precio Unitario: S/ {item.price.toFixed(2)}</p>
+                                                    <h4 className="text-xl font-black uppercase italic tracking-normal leading-none text-black">{item.name}</h4>
+                                                    <p className="font-bold text-[10px] uppercase opacity-50 mt-1 text-black text-black">Precio Unitario: S/ {item.price.toFixed(2)}</p>
                                                 </div>
                                                 <div className="flex items-center space-x-4">
-                                                    <div className="flex items-center border-2 border-black bg-white px-2 py-1">
+                                                    <div className="flex items-center border-2 border-black bg-white px-2 py-1 text-black">
                                                         <button onClick={() => updateQty(item.id, -1)} className="hover:text-[#CE2029]"><Icon name="Minus" size={14} /></button>
-                                                        <span className="mx-4 font-black text-lg">{item.qty}</span>
-                                                        <button onClick={() => updateQty(item.id, 1)}><Icon name="Plus" size={14} /></button>
+                                                        <span className="mx-4 font-black text-lg text-black">{item.qty}</span>
+                                                        <button onClick={() => updateQty(item.id, 1)} className="hover:text-[#CE2029]"><Icon name="Plus" size={14} /></button>
                                                     </div>
                                                     <button onClick={() => removeItem(item.id)} className="text-[#CE2029]"><Icon name="Trash2" size={20} /></button>
                                                 </div>
@@ -398,14 +427,17 @@
 
                                 {cartTotal > 0 && (
                                     <div className="p-8 border-t-8 border-black bg-[#F5E6CA] text-black">
-                                        <div className="flex justify-between items-end mb-6">
+                                        <div className="flex justify-between items-end mb-6 text-black">
                                             <div>
-                                                <p className="font-black uppercase text-[10px] tracking-widest opacity-60">Subtotal del pedido</p>
-                                                <span className="text-5xl font-black italic tracking-normal">S/ {cartTotal.toFixed(2)}</span>
+                                                <p className="font-black uppercase text-[10px] tracking-widest opacity-60 text-black">Subtotal del pedido</p>
+                                                <span className="text-5xl font-black italic tracking-normal text-black text-black">S/ {cartTotal.toFixed(2)}</span>
                                             </div>
                                             <Icon name="Flame" size={40} className="text-[#CE2029] fill-current" />
                                         </div>
-                                        <button className="w-full bg-[#CE2029] text-white py-6 text-2xl font-black uppercase italic hover:bg-black transition-all border-4 border-black shadow-[8px_8px_0_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none">
+                                        <button 
+                                            onClick={handleConfirmOrder}
+                                            className="w-full bg-[#CE2029] text-white py-6 text-2xl font-black uppercase italic hover:bg-black transition-all border-4 border-black shadow-[8px_8px_0_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none block text-center text-white"
+                                        >
                                             CONFIRMAR POR WHATSAPP
                                         </button>
                                     </div>
