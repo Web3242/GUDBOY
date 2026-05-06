@@ -174,7 +174,6 @@
                 const itemsText = cart.map(item => `*${item.qty}x* ${item.name} (S/ ${(item.price * item.qty).toFixed(2)})`).join('%0A');
                 const message = `Hola Gud Boy! 🍔 Quisiera realizar un pedido:%0A%0A${itemsText}%0A%0A*Total: S/ ${cartTotal.toFixed(2)}*%0A%0AGracias!`;
                 
-                // Redirección dinámica al WhatsApp con el mensaje predeterminado
                 const whatsappApiUrl = `https://api.whatsapp.com/send?phone=51936306561&text=${message}`;
                 window.open(whatsappApiUrl, '_blank');
             };
@@ -185,11 +184,11 @@
             return (
                 <div className="min-h-screen selection:bg-red-600 selection:text-white pb-20">
                     
-                    {/* BARRA DE NAVEGACIÓN - Tamaño de fuentes aumentado para 'La Carta' y 'Visítanos' */}
+                    {/* BARRA DE NAVEGACIÓN */}
                     <nav className="sticky top-0 w-full z-50 bg-[#1A1A1A] text-white py-4 px-6 md:px-12 flex justify-between items-center border-b-4 border-black">
                         <div className="flex items-center space-x-4">
                             <img 
-                                src="Sin título.png" 
+                                src="logo.png" 
                                 alt="Logo Gud Boy" 
                                 className="w-12 h-12 rounded-full border-2 border-[#CE2029] object-cover"
                             />
@@ -209,21 +208,21 @@
 
                     {/* SECCIÓN HERO */}
                     <section className="max-w-7xl mx-auto px-4 pt-12 md:pt-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div className="relative space-y-8 order-2 lg:order-1">
-                            <div className="absolute -top-12 left-6 md:left-2 w-24 h-24 md:w-32 md:h-32 bg-yellow-400 rounded-full border-4 border-black flex items-center justify-center text-center p-2 transform -rotate-12 z-20 shadow-xl">
-                                <span className="font-handwriting text-black text-sm md:text-lg leading-tight tracking-normal">¡Desde <br/> Comas! 🇵🇪</span>
+                        <div className="relative space-y-4 order-2 lg:order-1">
+                            <div className="inline-block bg-[#CE2029] text-white px-4 py-1 font-black uppercase italic text-sm transform -rotate-1 mb-2">
+                                DESDE EL CORAZÓN DE COMAS 🇵🇪
                             </div>
 
                             <h1 className="text-7xl md:text-[10rem] font-black uppercase italic leading-[0.85] tracking-normal text-black">
                                 LA <span className="text-[#CE2029]">REAL</span> <br/> SMASH<br/>HOUSE
                             </h1>
                             
-                            <div className="max-w-md">
-                                <p className="text-lg md:text-xl font-bold uppercase leading-tight tracking-normal">
+                            <div className="max-w-md pt-4">
+                                <p className="text-lg md:text-xl font-bold uppercase leading-tight tracking-normal text-black">
                                     Carne de verdad, pan artesanal y ese toque rebelde que solo encuentras en el Retablo. No somos fast food, somos comida real.
                                 </p>
-                                <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                                    <a href="#carta" className="bg-black text-white px-10 py-5 font-black text-xl uppercase italic transform hover:scale-105 transition-all shadow-[6px_6px_0_#CE2029] text-center text-white">
+                                <div className="mt-8">
+                                    <a href="#carta" className="bg-black text-white px-10 py-5 font-black text-xl uppercase italic transform hover:scale-105 transition-all shadow-[6px_6px_0_#CE2029] text-center inline-block">
                                         VER LA CARTA
                                     </a>
                                 </div>
@@ -239,13 +238,13 @@
                                         className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    <div className="absolute bottom-6 left-6 text-white text-white">
+                                    <div className="absolute bottom-6 left-6 text-white">
                                         <span className="bg-[#CE2029] px-2 py-1 font-black text-xs uppercase mb-2 block w-fit italic">Receta Original</span>
                                         <h2 className="text-4xl font-black uppercase italic tracking-normal text-white">Whopper Smash</h2>
                                     </div>
                                 </div>
                                 <div className="absolute -bottom-6 -right-6 md:-right-12 bg-white border-4 border-black p-4 transform rotate-6 max-w-[200px] shadow-xl">
-                                    <p className="font-handwriting text-black text-lg leading-none tracking-normal text-black">"El pan brioche es otro nivel..."</p>
+                                    <p className="font-handwriting text-black text-lg leading-none tracking-normal">"El pan brioche es otro nivel..."</p>
                                     <div className="flex text-yellow-500 mt-2">
                                         {[1,2,3,4,5].map(i => <Icon key={i} name="Star" size={14} className="text-yellow-500 fill-current" />)}
                                     </div>
@@ -254,7 +253,7 @@
                         </div>
                     </section>
 
-                    {/* SECCIÓN DE LA CARTA - Cambio de Piqueos a Bebidas */}
+                    {/* SECCIÓN DE LA CARTA */}
                     <section id="carta" className="max-w-7xl mx-auto px-4 pt-32 pb-20">
                         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 text-black">
                             <div>
@@ -284,20 +283,20 @@
                                     onClick={() => addToCart(item)}
                                 >
                                     {item.note && (
-                                        <div className="absolute top-4 right-4 bg-yellow-400 border-2 border-black px-2 py-1 text-[10px] font-black uppercase transform rotate-2 text-black">
+                                        <div className="absolute top-4 right-4 bg-yellow-400 border-2 border-black px-2 py-1 text-[10px] font-black uppercase transform rotate-2 text-black text-black">
                                             {item.note}
                                         </div>
                                     )}
-                                    <div className="flex justify-between items-start mb-4 text-black">
+                                    <div className="flex justify-between items-start mb-4 text-black text-black">
                                         <h3 className="text-4xl font-black uppercase italic tracking-normal leading-none group-hover:text-white">
                                             {item.name}
                                         </h3>
                                         <span className="text-3xl font-black italic group-hover:text-white">S/ {item.price.toFixed(2)}</span>
                                     </div>
-                                    <p className="font-bold text-sm uppercase opacity-60 group-hover:opacity-100 group-hover:text-white max-w-xs mb-8 text-black tracking-normal">
+                                    <p className="font-bold text-sm uppercase opacity-60 group-hover:opacity-100 group-hover:text-white max-w-xs mb-8 text-black tracking-normal text-black">
                                         {item.desc}
                                     </p>
-                                    <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest group-hover:text-white border-t-2 border-black group-hover:border-white pt-4 text-black">
+                                    <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest group-hover:text-white border-t-2 border-black group-hover:border-white pt-4 text-black text-black">
                                         <span>Añadir al pedido</span>
                                         <Icon name="ChevronRight" size={14} />
                                     </div>
@@ -329,7 +328,9 @@
                                         <Icon name="Navigation" size={32} className="text-[#CE2029] shrink-0" />
                                         <div>
                                             <p className="font-black text-xl uppercase italic text-white tracking-normal leading-none">Horarios</p>
-                                            <p className="font-bold opacity-60 uppercase text-xs tracking-widest text-white/80">Martes a Domingo de 6:30 PM a 11:00 PM</p>
+                                            <p className="font-bold opacity-60 uppercase text-xs tracking-widest text-white/80">
+                                                Lunes a Miércoles y Viernes a Domingo de 6:30 PM a 11:00 PM
+                                            </p>
                                         </div>
                                     </div>
 
@@ -369,7 +370,7 @@
                                 <div className="absolute inset-0 opacity-20 pointer-events-none bg-dots"></div>
                                 <div className="relative z-10 space-y-6">
                                     <div className="bg-white border-4 border-black p-6 transform -rotate-2 shadow-[8px_8px_0_#1A1A1A]">
-                                        <h4 className="text-black text-5xl font-black uppercase italic tracking-normal leading-none text-black">ENTRA ACÁ PARA <br/> VER LA UBI</h4>
+                                        <h4 className="text-black text-5xl font-black uppercase italic tracking-normal leading-none text-black text-black">ENTRA ACÁ PARA <br/> VER LA UBI</h4>
                                     </div>
                                     <p className="text-white font-black uppercase text-sm tracking-widest bg-black px-4 py-1 inline-block">MIRA EL MAPA EXACTO EN TU CELULAR</p>
                                     <div className="pt-4">
@@ -377,7 +378,7 @@
                                             href={googleMapsUrl}
                                             target="_blank" 
                                             rel="noopener noreferrer"
-                                            className="inline-block bg-white text-black px-12 py-5 font-black uppercase italic text-2xl hover:scale-110 transition-transform shadow-[10px_10px_0_#1A1A1A] border-4 border-black text-black"
+                                            className="inline-block bg-white text-black px-12 py-5 font-black uppercase italic text-2xl hover:scale-110 transition-transform shadow-[10px_10px_0_#1A1A1A] border-4 border-black text-black text-black"
                                         >
                                             ABRIR EN MAPS
                                         </a>
@@ -387,13 +388,13 @@
                         </div>
                     </section>
 
-                    {/* PANEL DEL CARRITO - Mensaje de confirmación dinámico */}
+                    {/* PANEL DEL CARRITO */}
                     {isCartOpen && (
                         <div className="fixed inset-0 z-[100] flex justify-end">
                             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsCartOpen(false)}></div>
                             <div className="relative w-full max-w-lg bg-white h-full flex flex-col border-l-8 border-black">
                                 <div className="p-8 border-b-8 border-black bg-black text-white flex justify-between items-center">
-                                    <h2 className="text-4xl font-black italic uppercase tracking-normal text-white text-white">TU CUENTA<span className="text-[#CE2029]">.</span></h2>
+                                    <h2 className="text-4xl font-black italic uppercase tracking-normal text-white text-white text-white">TU CUENTA<span className="text-[#CE2029]">.</span></h2>
                                     <button onClick={() => setIsCartOpen(false)} className="hover:rotate-90 transition-transform text-white">
                                         <Icon name="X" size={32} />
                                     </button>
@@ -407,15 +408,15 @@
                                         </div>
                                     ) : (
                                         cart.map(item => (
-                                            <div key={item.id} className="flex justify-between items-center border-b-2 border-dashed border-black pb-4 text-black">
+                                            <div key={item.id} className="flex justify-between items-center border-b-2 border-dashed border-black pb-4 text-black text-black">
                                                 <div className="flex-1 pr-4">
-                                                    <h4 className="text-xl font-black uppercase italic tracking-normal leading-none text-black">{item.name}</h4>
-                                                    <p className="font-bold text-[10px] uppercase opacity-50 mt-1 text-black text-black">Precio Unitario: S/ {item.price.toFixed(2)}</p>
+                                                    <h4 className="text-xl font-black uppercase italic tracking-normal leading-none text-black text-black">{item.name}</h4>
+                                                    <p className="font-bold text-[10px] uppercase opacity-50 mt-1 text-black text-black text-black">Precio Unitario: S/ {item.price.toFixed(2)}</p>
                                                 </div>
                                                 <div className="flex items-center space-x-4">
-                                                    <div className="flex items-center border-2 border-black bg-white px-2 py-1 text-black">
+                                                    <div className="flex items-center border-2 border-black bg-white px-2 py-1 text-black text-black">
                                                         <button onClick={() => updateQty(item.id, -1)} className="hover:text-[#CE2029]"><Icon name="Minus" size={14} /></button>
-                                                        <span className="mx-4 font-black text-lg text-black">{item.qty}</span>
+                                                        <span className="mx-4 font-black text-lg text-black text-black">{item.qty}</span>
                                                         <button onClick={() => updateQty(item.id, 1)} className="hover:text-[#CE2029]"><Icon name="Plus" size={14} /></button>
                                                     </div>
                                                     <button onClick={() => removeItem(item.id)} className="text-[#CE2029]"><Icon name="Trash2" size={20} /></button>
@@ -427,16 +428,16 @@
 
                                 {cartTotal > 0 && (
                                     <div className="p-8 border-t-8 border-black bg-[#F5E6CA] text-black">
-                                        <div className="flex justify-between items-end mb-6 text-black">
+                                        <div className="flex justify-between items-end mb-6 text-black text-black">
                                             <div>
-                                                <p className="font-black uppercase text-[10px] tracking-widest opacity-60 text-black">Subtotal del pedido</p>
-                                                <span className="text-5xl font-black italic tracking-normal text-black text-black">S/ {cartTotal.toFixed(2)}</span>
+                                                <p className="font-black uppercase text-[10px] tracking-widest opacity-60 text-black text-black">Subtotal del pedido</p>
+                                                <span className="text-5xl font-black italic tracking-normal text-black text-black text-black">S/ {cartTotal.toFixed(2)}</span>
                                             </div>
                                             <Icon name="Flame" size={40} className="text-[#CE2029] fill-current" />
                                         </div>
                                         <button 
                                             onClick={handleConfirmOrder}
-                                            className="w-full bg-[#CE2029] text-white py-6 text-2xl font-black uppercase italic hover:bg-black transition-all border-4 border-black shadow-[8px_8px_0_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none block text-center text-white"
+                                            className="w-full bg-[#CE2029] text-white py-6 text-2xl font-black uppercase italic hover:bg-black transition-all border-4 border-black shadow-[8px_8px_0_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none block text-center text-white text-white"
                                         >
                                             CONFIRMAR POR WHATSAPP
                                         </button>
